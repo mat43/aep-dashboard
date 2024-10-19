@@ -11,10 +11,10 @@
   },
   "dependencies": {
     "axios": "^1.7.7",
+    "better-sqlite3": "^11.4.0",
     "echarts": "^5.5.1",
     "jquery": "^3.7.1",
     "nuxt": "^3.13.2",
-    "sqlite3": "^5.1.7",
     "vue": "latest",
     "vue-echarts": "^7.0.3",
     "vue-router": "latest",
