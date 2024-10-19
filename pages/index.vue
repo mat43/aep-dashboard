@@ -1,47 +1,19 @@
 <template>
     <!-- Main Div -->
     <div>
-
-        <!-- <div>
-    <h1>Data from SQLite</h1>
-    <table>
-      <thead>
-        <tr>
-          <th>Observation Number</th>
-          <th>Date/Time</th>
-          <th>Point Name</th>
-          <th>Qualifier</th>
-          <th>At Risk Notes</th>
-          <th>Follow-up Notes</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="item in users" :key="item.OBSRVTN_NB">
-          <td>{{ item.OBSRVTN_NB }}</td>
-          <td>{{ item.DATETIME_DTM }}</td>
-          <td>{{ item.PNT_NM }}</td>
-          <td>{{ item.QUALIFIER_TXT }}</td>
-          <td>{{ item.PNT_ATRISKNOTES_TX }}</td>
-          <td>{{ item.PNT_ATRISKFOLWUPNTS_TX }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div> -->
-
-
         <!-- Data Visualization -->
-        <div class="flex justify-center p-10">
+        <div class="p-10">
             <!-- Pie Chart -->
-            <div class="w-1/2">
+            <div class="">
                 <client-only>
                     <v-chart class="chart" :option="option" autoresize />
                 </client-only>
             </div>
             <!-- Table -->
-            <div class="flex">
+            <div class="">
                 <EasyDataTable class=""
                 :headers="headers"
-                :items="users"
+                :items="entries"
                 />
             </div>
         </div>
@@ -61,24 +33,26 @@
   // Labraries for Table
   import type { Header, Item } from "vue3-easy-data-table";
 
-  // Setup SQL database
-
   use([CanvasRenderer, PieChart, TitleComponent, TooltipComponent, LegendComponent]);
+
+  // Set up SQL database
   import { onMounted } from 'vue';
-  const users = ref([]);
+
+  const entries = ref([]);
   // Fetch the data from the server-side API when the component is mounted
     onMounted(async () => {
     try {
         // Fetching the data from the SQLite API route at /api/db
-        users.value = await $fetch('/api/db');
+        entries.value = await $fetch('/api/db');
     } catch (error) {
         console.error('Failed to fetch data:', error);
     }
     });
   
+  // Pie Chart Logic
   const option = ref({
     title: {
-      text: 'Traffic Sources',
+      text: 'Categories of Hazards',
       left: 'center',
     },
     
@@ -89,20 +63,28 @@
     legend: {
       orient: 'vertical',
       left: 'left',
-      data: ['Direct', 'Email', 'Ad Networks', 'Video Ads', 'Search Engines'],
+      data: ['Fire with Sustained Fuel Force', 'Explosion', 'Excavation or Trench', 'Electrical Contact with Source', 'Arc Flash', 'High Dose of Toxic Chemical or Radiation', 'Suspended Load', 'Fall from Elevation', 'Mobile Equipment/Traffic with Workers on Foot', 'Motor Vehicle Incident (occupant)', 'Heavy Rotating Equipment', 'High Temperature', 'Steam'],
     },
     series: [
       {
-        name: 'Traffic Sources',
+        name: 'Categories of Hazards',
         type: 'pie',
         radius: '55%',
         center: ['50%', '60%'],
         data: [
-          { value: 335, name: 'Direct' },
-          { value: 310, name: 'Email' },
-          { value: 234, name: 'Ad Networks' },
-          { value: 135, name: 'Video Ads' },
-          { value: 1548, name: 'Search Engines' },
+          { value: 335, name: 'Fire with Sustained Fuel Force' },
+          { value: 310, name: 'Explosion' },
+          { value: 234, name: 'Excavation or Trench' },
+          { value: 135, name: 'Electrical Contact with Source' },
+          { value: 232, name: 'Arc Flash' },
+          { value: 123, name: 'High Dose of Toxic Chemical or Radiation' },
+          { value: 564, name: 'Suspended Load' },
+          { value: 111, name: 'Fall from Elevation' },
+          { value: 45, name: 'Mobile Equipment/Traffic with Workers on Foot' },
+          { value: 213, name: 'Motor Vehicle Incident (occupant)' },
+          { value: 1548, name: 'Heavy Rotating Equipment' },
+          { value: 321, name: 'High Temperature' },
+          { value: 543, name: 'Steam' },
         ],
         emphasis: {
           itemStyle: {
@@ -128,7 +110,7 @@
   
   <style scoped>
   .chart {
-    height: 100vh;
+    height: 50vh;
   }
   </style>
   
