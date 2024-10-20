@@ -1,48 +1,74 @@
 <template>
     <!-- Main Div -->
-    <div class="bg-white font-sans">
+    <div class="bg-gray-50 font-sans">
         <!-- Data Visualization -->
         <div class="p-10">
             <!-- Pie Chart -->
-            <div class="mb-5">
+            <div class="mb-5 p-4 bg-white shadow-md rounded-md">
                 <client-only>
                     <v-chart v-if="isChartReady" class="chart" :option="option" autoresize />
                 </client-only>
             </div>
             <!-- Table -->
             <div class="">
-                <!-- Search Div -->
-                <div class="mb-4 p-4 bg-white shadow rounded-md w-1/3">
-                    <!-- First Row: Search By Dropdown -->
-                    <div class="flex items-center space-x-4 mb-3">
-                        <!-- Label for Search By Dropdown -->
-                        <label for="search-field" class="font-medium text-sm">Search by:</label>
-                        
-                        <!-- Dropdown (select) for selecting search field -->
-                        <select v-model="searchField" id="search-field" 
-                        class="border border-gray-300 rounded-md p-2 bg-gray-50 text-gray-700 focus:ring-1 focus:ring-blue-500 focus:border-blue-500 focus:outline-none w-1/2 text-sm">
-                        <option value="OBSRVTN_NB">Observation Number</option>
-                        <option value="DATETIME_DTM">Date/Time</option>
-                        <option value="PNT_NM">Point Name</option>
-                        <option value="QUALIFIER_TXT">Qualifier</option>
-                        <option value="PNT_ATRISKNOTES_TX">At Risk Notes</option>
-                        <option value="PNT_ATRISKFOLWUPNTS_TX">Follow-up Notes</option>
-                        </select>
-                    </div>
+                <!-- Search Div + Stats -->
+                <div class="flex">
+                    <!-- Search Div -->
+                    <div class="mb-4 p-4 bg-white shadow-md rounded-md w-1/2 mr-3">
+                        <!-- First Row: Search By Dropdown -->
+                        <div class="flex items-center space-x-4 mb-3">
+                            <!-- Label for Search By Dropdown -->
+                            <label for="search-field" class="font-medium text-sm">Search by:</label>
+                            
+                            <!-- Dropdown (select) for selecting search field -->
+                            <select v-model="searchField" id="search-field" 
+                            class="border border-gray-300 rounded-md p-2 bg-gray-50 text-gray-700 focus:ring-1 focus:ring-blue-500 focus:border-blue-500 focus:outline-none w-1/2 text-sm">
+                            <option value="OBSRVTN_NB">Observation Number</option>
+                            <option value="DATETIME_DTM">Date/Time</option>
+                            <option value="PNT_NM">Point Name</option>
+                            <option value="QUALIFIER_TXT">Qualifier</option>
+                            <option value="PNT_ATRISKNOTES_TX">At Risk Notes</option>
+                            <option value="PNT_ATRISKFOLWUPNTS_TX">Follow-up Notes</option>
+                            <option value="PSIF">Is a PSIF</option>
+                            <option value="CATEGORY">Category</option>
+                            <option value="CONFIDENCE">Confidence</option>
+                            </select>
+                        </div>
 
-                    <!-- Second Row: Search Value Input Field -->
-                    <div class="flex items-center space-x-4 text-sm">
-                        <!-- Label for Search Value Input -->
-                        <label for="search-value" class="font-medium text-sm">Search value:</label>
-                        
-                        <!-- Input field for entering search value -->
-                        <input id="search-value" 
-                        class="border border-gray-300 rounded-md p-2 w-8/12 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none" 
-                        type="text" 
-                        v-model="searchValue" 
-                        placeholder="Enter search value">
+                        <!-- Second Row: Search Value Input Field -->
+                        <div class="flex items-center space-x-4 text-sm">
+                            <!-- Label for Search Value Input -->
+                            <label for="search-value" class="font-medium text-sm">Search value:</label>
+                            
+                            <!-- Input field for entering search value -->
+                            <input id="search-value" 
+                            class="border border-gray-300 rounded-md p-2 w-8/12 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none" 
+                            type="text" 
+                            v-model="searchValue" 
+                            placeholder="Enter search value">
+                        </div>
+                    </div>
+                
+                <!-- Statistics -->
+                <div class="mb-4 p-4 bg-white shadow-md rounded-md w-1/2 flex flex-col">
+                    <div class="flex">
+                        <span class="text-sm mr-1 font-bold">Number of PSIFs:</span>
+                        <span class="font-medium text-sm">{{ PSIF }}</span>
+                    </div>
+                    <div class="flex">
+                        <span class="text-sm mr-1 font-bold">Total data entries:</span>
+                        <span class="font-medium text-sm">{{ entries.length }}</span>
+                    </div>
+                    <div class="flex">
+                        <span class="text-sm mr-1 font-bold">Average confidence:</span>
+                        <span class="font-medium text-sm">{{ Math.floor(avgConf / entries.length) }}%</span>
+                    </div>
+                    <div class="flex">
+                        <span class="text-sm mr-1 font-bold">Most common hazard:</span>
+                        <span class="font-medium text-sm">{{ mostCommonCategory }}</span>
                     </div>
                 </div>
+            </div>
                 <EasyDataTable class=""
                 :headers="headers"
                 :items="entries"
@@ -94,6 +120,9 @@ let counts = [
 ];
 
 let PSIF = 0;
+let avgConf = 0;
+let mostCommonCategory = "None";
+let mostCommonNumber = 0;
 
 onMounted(async () => {
 try {
@@ -102,6 +131,8 @@ try {
     entries.value.forEach(element => {
         // Convert PSIF to True/False format
         element.PSIF = element.PSIF === 1 ? (PSIF++, "True") : "False";
+        element.CONFIDENCE = Math.floor(Math.random() * 100);
+        avgConf += element.CONFIDENCE;
 
         switch (element.CATEGORY) {
             case 1:
@@ -161,6 +192,14 @@ try {
                 break;
         }
         isChartReady.value = true;
+
+        for (let i = 0; i < counts.length; i++) {
+            if (counts[i].value > mostCommonNumber) {
+                mostCommonCategory = counts[i].name;
+                mostCommonNumber = counts[i].value;
+                console.log(counts);
+            }
+        }
     });
   } catch (error) {
     console.error('Failed to fetch data:', error);
@@ -201,21 +240,20 @@ try {
     ],
   });
 
-
 // Table Logic
 const searchField = ref("OBSRVTN_NB");
 const searchValue = ref("");
 
 const headers: Header[] = [
     { text: "Observation Number", value: "OBSRVTN_NB" },
-    { text: "Date/Time", value: "DATETIME_DTM"},
+    { text: "Date/Time", value: "DATETIME_DTM", sortable: true},
     { text: "Point Name", value: "PNT_NM"},
     { text: "Qualifier", value: "QUALIFIER_TXT"},
     { text: "At Risk Notes", value: "PNT_ATRISKNOTES_TX"},
     { text: "Follow-up Notes", value: "PNT_ATRISKFOLWUPNTS_TX"},
     { text: "Is a PSIF", value: "PSIF", sortable: true},
-    { text: "Category", value: "CATEGORY"},
-    { text: "Confidence", value: "CONFIDENCE"},
+    { text: "Category", value: "CATEGORY", sortable: true},
+    { text: "Confidence", value: "CONFIDENCE", sortable: true},
 ];
 </script>
   
