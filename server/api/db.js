@@ -2,7 +2,7 @@ import Database from 'better-sqlite3';
 import { resolve } from 'path';
 
 export default defineEventHandler(async () => {
-  const dbPath = resolve(process.cwd(), 'hackathon.db');
+  const dbPath = resolve(process.cwd(), 'HackathonDB.db');
   
   console.log('Database path:', dbPath); // Log to ensure you're accessing the correct file
 

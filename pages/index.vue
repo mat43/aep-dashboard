@@ -131,7 +131,6 @@ try {
     entries.value.forEach(element => {
         // Convert PSIF to True/False format
         element.PSIF = element.PSIF === 1 ? (PSIF++, "True") : "False";
-        element.CONFIDENCE = Math.floor(Math.random() * 100);
         avgConf += element.CONFIDENCE;
 
         switch (element.CATEGORY) {
@@ -197,7 +196,6 @@ try {
             if (counts[i].value > mostCommonNumber) {
                 mostCommonCategory = counts[i].name;
                 mostCommonNumber = counts[i].value;
-                console.log(counts);
             }
         }
     });
@@ -244,6 +242,7 @@ try {
 const searchField = ref("OBSRVTN_NB");
 const searchValue = ref("");
 
+// Headers for table
 const headers: Header[] = [
     { text: "Observation Number", value: "OBSRVTN_NB" },
     { text: "Date/Time", value: "DATETIME_DTM", sortable: true},
