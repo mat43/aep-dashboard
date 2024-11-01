@@ -1,75 +1,79 @@
-# Nuxt Minimal Starter
+# AEP Safety Observation Dashboard
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+I'm thrilled to share that my team earned **first place at HackOHI/O 2024**, held on October 19-20th, by creating this project for the American Electric Power (AEP) Safety Observation Challenge. This repository contains the dashboard component of our solution, designed to streamline and visualize safety report data.
 
-## Setup
+## Project Overview
 
-Make sure to install dependencies:
+For this hackathon, our team addressed a real-world challenge faced by AEP: handling and analyzing large datasets of safety reports from site visits to prioritize and address potential hazards effectively.
 
+### Solution Highlights
+
+1. **Data Transformation & Organization**  
+   - We began by converting AEP's raw CSV dataset into a SQLite database.
+   - Additional fields were added to capture scores and categories for each report, improving organization and enabling more effective analysis.
+
+2. **Risk Assessment with LLama 3.2 Language Model**  
+   - Using LLama 3.2, we assessed each report’s risk level and categorized it into one of 13 key safety categories relevant to AEP.
+   - The model assigned a confidence score to each category, helping prioritize reports by severity and relevance.
+
+3. **Interactive Dashboard**  
+   - We built this intuitive dashboard using **Nuxt.js** to provide AEP with a powerful tool for data visualization and exploration.
+   - Key features include:
+     - Visual insights into hazard categories
+     - Search functionality for specific fields
+     - User-friendly layout to facilitate data analysis
+
+## Dashboard Features
+
+- **Category Summaries**: Display high-level overviews of categorized safety hazards.
+- **Search & Filter**: Easily locate specific reports by various fields.
+- **Confidence Scoring**: Assess the model’s certainty for each report classification.
+- **User-Friendly Interface**: Prioritize simplicity to help AEP quickly identify high-risk entries.
+
+## Team
+
+This project was built by:
+- [Mathew Sinadinos](https://github.com/mat43)  
+- [Ethan Jones](https://github.com/Collatdmg)  
+- [Trevor Pribis](https://github.com/tjbuddy100)  
+
+We deepened our understanding of language models, data engineering, and collaborative problem-solving under tight time constraints.
+
+### Acknowledgment
+
+Thank you, HackOHI/O and AEP, for this opportunity to learn, innovate, and showcase our work!
+
+## Video Explanation
+
+For a full video explanation of our project, watch it on YouTube: [here](https://www.youtube.com/watch?v=n5ZxjT5SYxI&source_ve_path=MjM4NTE).
+
+## Getting Started
+
+### Prerequisites
+
+- **Node.js** and **NPM**
+
+### Installation
+
+1. Clone this repository:
 ```bash
-# npm
-npm install
-
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
+git clone https://github.com/mat43/aep-dashboard.git
+```
+   
+2. Navigate into the project directory:
+  ```bash
+  cd aep-dashboard
 ```
 
-## Development Server
+3. Install dependencies:
+  ```bash
+  npm install
+```
 
-Start the development server on `http://localhost:3000`:
+### Running the Dashboard
 
+To start the development server:
 ```bash
-# npm
 npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
 ```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+This will launch the dashboard on `localhost:3000` by default.
