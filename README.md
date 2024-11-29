@@ -12,8 +12,8 @@ For this hackathon, our team addressed a real-world challenge faced by AEP: hand
    - We began by converting AEP's raw CSV dataset into a SQLite database.
    - Additional fields were added to capture scores and categories for each report, improving organization and enabling more effective analysis.
 
-2. **Risk Assessment with LLama 3.2 Language Model**  
-   - Using LLama 3.2, we assessed each report’s risk level and categorized it into one of 13 key safety categories relevant to AEP.
+2. **Risk Assessment with the InternLM2.5 Language Model**  
+   - Using InternLM2.5, we assessed each report’s risk level and categorized it into one of 13 key safety categories relevant to AEP.
    - The model assigned a confidence score to each category, helping prioritize reports by severity and relevance.
 
 3. **Interactive Dashboard**  
